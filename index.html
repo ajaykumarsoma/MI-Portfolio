@@ -128,7 +128,7 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
   <div class="hero-badge">Mechanistic Interpretability</div>
   <h1>Understanding What Neural Networks Actually Do</h1>
   <p class="hero-sub">
-    23 experiments across Mechanistic Interpretability and Finetuning — from training a transformer from scratch to Direct Preference Optimization, with a consistent focus on understanding <em>why</em> models behave as they do.
+    26 experiments across Mechanistic Interpretability and Finetuning — from training a transformer from scratch to Direct Preference Optimization, with a consistent focus on understanding <em>why</em> models behave as they do.
   </p>
   <div class="hero-links">
     <a href="#projects" class="btn btn-primary">View Projects</a>
@@ -200,7 +200,7 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
 <section id="projects">
 <div class="section-inner">
   <div class="section-label">All Projects</div>
-  <div class="section-title">23 Experiments</div>
+  <div class="section-title">26 Experiments</div>
   <p class="section-sub">Each project has a clean hypothesis, honest methodology, and quantitative results — including deliberate null results and counter-intuitive findings.</p>
 
   <div class="projects-grid">
@@ -491,6 +491,33 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
       <div class="proj-technique">Draft-verify loop · DistilGPT-2 + GPT-2 · MPS dispatch</div>
       <div class="proj-result"><strong>4.12× wall-clock speedup</strong> on M4 MPS. DistilGPT-2 draft (γ=4) + GPT-2 Small verification. Measured speedup exceeds theory — MPS amortizes target kernel dispatch across γ positions vs 50 sequential single-token calls.</div>
       <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/SpeculativeDecoding" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
+    <!-- 24 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">24</span><span class="proj-tag tag-build">Agents</span></div>
+      <div class="proj-title">LLMAgents</div>
+      <div class="proj-technique">ReAct loop · log-prob tool selection · calculator + lookup</div>
+      <div class="proj-result">Correct tool provides <strong>+3.35 nats information gain</strong> (28× higher P for correct answer). GPT-2 log-prob selector is only 45% accurate — demonstrates exactly why function-calling fine-tuning exists. Wrong tool actually hurts (−0.32 nats).</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/LLMAgents" target="_blank">View on GitHub ↗</a><span class="proj-honest">honest null (tool routing)</span></div>
+    </div>
+
+    <!-- 25 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">25</span><span class="proj-tag tag-control">Eval</span></div>
+      <div class="proj-title">EvalFramework</div>
+      <div class="proj-technique">LLM-as-Judge · G-Eval · hallucination detector</div>
+      <div class="proj-result">LLM-as-Judge ρ=−0.10 (random), G-Eval ρ=0.36 (marginal), hallucination AUC=0.43 (below random). <strong>Calibrates minimum scale for LLM eval</strong> — GPT-2 (117M) is insufficient; all three methods require 10B+ params to work as intended.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/EvalFramework" target="_blank">View on GitHub ↗</a><span class="proj-honest">honest null (scale)</span></div>
+    </div>
+
+    <!-- 26 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">26</span><span class="proj-tag tag-pipeline">RL</span></div>
+      <div class="proj-title">GRPO</div>
+      <div class="proj-technique">DeepSeek R1 algo · clipped PG + KL · verifiable reward · LoRA</div>
+      <div class="proj-result">22% → 0% accuracy: reward density collapse at 117M scale. <strong>78% of groups have zero reward variance → zero advantage → only KL trains → catastrophic forgetting.</strong> Explains why DeepSeek R1 needed a 67B SFT checkpoint first.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/GRPO" target="_blank">View on GitHub ↗</a><span class="proj-honest">honest failure-mode</span></div>
     </div>
 
   </div>
