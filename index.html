@@ -128,7 +128,7 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
   <div class="hero-badge">Mechanistic Interpretability</div>
   <h1>Understanding What Neural Networks Actually Do</h1>
   <p class="hero-sub">
-    26 experiments across Mechanistic Interpretability and Finetuning — from training a transformer from scratch to Direct Preference Optimization, with a consistent focus on understanding <em>why</em> models behave as they do.
+    29 experiments across Mechanistic Interpretability and Finetuning — from training a transformer from scratch to Direct Preference Optimization, with a consistent focus on understanding <em>why</em> models behave as they do.
   </p>
   <div class="hero-links">
     <a href="#projects" class="btn btn-primary">View Projects</a>
@@ -200,8 +200,8 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
 <section id="projects">
 <div class="section-inner">
   <div class="section-label">All Projects</div>
-  <div class="section-title">26 Experiments</div>
-  <p class="section-sub">Each project has a clean hypothesis, honest methodology, and quantitative results — including deliberate null results and counter-intuitive findings.</p>
+  <div class="section-title">29 Experiments</div>
+  <p class="section-sub">Each project has a clean hypothesis, honest methodology, and quantitative results — including deliberate null results and counter-intuitive findings that reveal how these systems actually behave.</p>
 
   <div class="projects-grid">
 
@@ -520,6 +520,33 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
       <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/GRPO" target="_blank">View on GitHub ↗</a><span class="proj-honest">honest failure-mode</span></div>
     </div>
 
+    <!-- 27 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">27</span><span class="proj-tag tag-build">RAG</span></div>
+      <div class="proj-title">AdvancedRAG</div>
+      <div class="proj-technique">BM25 · Hybrid RRF · cross-encoder reranking · query expansion</div>
+      <div class="proj-result">TF-IDF/BM25 both hit 98% on compact KB. <strong>Hybrid RRF drops to 60%</strong> — noisy GPT-2 dense embeddings degrade the sparse signal. Cross-encoder reranking (GPT-2) drops to 20%. Validates the core production rule: measure your baseline before adding complexity.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/AdvancedRAG" target="_blank">View on GitHub ↗</a><span class="proj-honest">honest (baseline wins)</span></div>
+    </div>
+
+    <!-- 28 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">28</span><span class="proj-tag tag-control">Safety</span></div>
+      <div class="proj-title">Guardrails</div>
+      <div class="proj-technique">Safety classifier · PII detector · faithfulness filter · 3-layer pipeline</div>
+      <div class="proj-result"><strong>Layer 1: 100% precision (zero false positives)</strong> on safety classification. Layer 2 PII detector: 95% recall via regex + perplexity. Layer 3 faithfulness filter: AUC=0.756. No guardrail library — implemented from the signal up.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/Guardrails" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
+    <!-- 29 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">29</span><span class="proj-tag tag-build">Agents</span></div>
+      <div class="proj-title">StructuredOutput</div>
+      <div class="proj-technique">SFT + LoRA · JSON schemas · 4 function types · field F1</div>
+      <div class="proj-result"><strong>0% → 100% JSON validity</strong> in 200 steps (0.35% of parameters). Schema compliance 0% → 100%. Field F1 0.00 → 0.82. Format learned at step 40; field semantics plateau at F1=0.84 — showing JSON structure and content are separable learning targets.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/StructuredOutput" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
   </div>
 </div>
 </section>
@@ -531,7 +558,7 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
 <div class="section-inner">
   <div class="section-label">Stack</div>
   <div class="section-title">Tools & Techniques</div>
-  <p class="section-sub">All experiments run on CPU using open-source tools. No proprietary APIs, no black boxes.</p>
+  <p class="section-sub">All experiments run on M4 Apple Silicon (MPS/CPU) using open-source tools. No proprietary APIs, no black boxes — every number is reproducible from scratch.</p>
   <div class="skills-grid">
     <div class="skill-group">
       <h4>Core Libraries</h4>
