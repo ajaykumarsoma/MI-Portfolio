@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajay Kumar Soma — Mechanistic Interpretability</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2128;
+  --border:    #30363d;
+  --accent:    #2563eb;
+  --accent2:   #7c3aed;
+  --accent3:   #16a34a;
+  --warn:      #f59e0b;
+  --text:      #e6edf3;
+  --muted:     #8b949e;
+  --radius:    10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono',monospace;font-size:0.85em;background:var(--surface2);padding:1px 5px;border-radius:4px;color:#79c0ff}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,17,23,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{font-weight:600;font-size:0.95rem;color:var(--text)}
+.nav-links{display:flex;gap:1.6rem;font-size:0.88rem;color:var(--muted)}
+.nav-links a{color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--text);text-decoration:none}
+.nav-gh{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 12px;color:var(--text) !important;font-size:0.83rem;transition:border-color .2s}
+.nav-gh:hover{border-color:var(--accent);text-decoration:none !important}
+
+/* ── HERO ── */
+.hero{max-width:860px;margin:0 auto;padding:80px 2rem 60px;text-align:center}
+.hero-badge{display:inline-block;background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(124,58,237,.15));border:1px solid rgba(124,58,237,.35);border-radius:20px;padding:4px 14px;font-size:0.78rem;color:#a78bfa;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.5rem}
+.hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:700;line-height:1.15;margin-bottom:1rem;background:linear-gradient(135deg,#e6edf3 40%,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.08rem;color:var(--muted);max-width:620px;margin:0 auto 2.2rem}
+.hero-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:9px 20px;border-radius:7px;font-size:0.88rem;font-weight:500;transition:all .2s;cursor:pointer;border:none}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#1d4ed8;text-decoration:none}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--accent);text-decoration:none}
+
+/* ── SECTION SHELL ── */
+section{padding:64px 2rem}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{font-size:0.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem}
+.section-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;margin-bottom:.6rem}
+.section-sub{color:var(--muted);max-width:660px;margin-bottom:3rem;font-size:0.95rem}
+
+/* ── STORY / NARRATIVE ── */
+.story-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-bottom:2.5rem}
+.story-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem}
+.story-card-icon{font-size:1.6rem;margin-bottom:.8rem}
+.story-card h3{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.story-card p{color:var(--muted);font-size:0.88rem;line-height:1.55}
+
+/* ── CONVERGENCE CALLOUT ── */
+.callout{background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(124,58,237,.08));border:1px solid rgba(124,58,237,.3);border-radius:var(--radius);padding:1.6rem 2rem;margin-bottom:3rem}
+.callout h3{font-size:1rem;font-weight:600;margin-bottom:.6rem;color:#a78bfa}
+.callout p{color:var(--muted);font-size:0.9rem;line-height:1.6}
+.callout-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-top:1rem}
+.callout-item{background:rgba(255,255,255,.04);border-radius:6px;padding:.75rem 1rem;font-size:0.83rem}
+.callout-item strong{color:var(--text);display:block;margin-bottom:.2rem}
+.callout-item span{color:var(--muted)}
+
+/* ── PROJECT GRID ── */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.2rem}
+.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem 1.5rem;display:flex;flex-direction:column;transition:border-color .2s,transform .15s}
+.proj-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.proj-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.9rem;gap:.8rem}
+.proj-num{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:2px 8px;white-space:nowrap;flex-shrink:0}
+.proj-tag{font-size:0.72rem;font-weight:600;letter-spacing:.05em;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.tag-build   {background:rgba(22,163,74,.15); color:#4ade80;border:1px solid rgba(22,163,74,.3)}
+.tag-observe {background:rgba(37,99,235,.15); color:#60a5fa;border:1px solid rgba(37,99,235,.3)}
+.tag-decompose{background:rgba(124,58,237,.15);color:#a78bfa;border:1px solid rgba(124,58,237,.3)}
+.tag-theory  {background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3)}
+.tag-causal  {background:rgba(220,38,38,.15); color:#f87171;border:1px solid rgba(220,38,38,.3)}
+.tag-read    {background:rgba(14,165,233,.15); color:#38bdf8;border:1px solid rgba(14,165,233,.3)}
+.tag-control {background:rgba(16,185,129,.15); color:#34d399;border:1px solid rgba(16,185,129,.3)}
+.tag-null    {background:rgba(107,114,128,.15);color:#9ca3af;border:1px solid rgba(107,114,128,.3)}
+.tag-dynamics{background:rgba(251,113,133,.15);color:#fb7185;border:1px solid rgba(251,113,133,.3)}
+.tag-pipeline{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.3)}
+.proj-title{font-size:1rem;font-weight:600;margin-bottom:.35rem}
+.proj-technique{font-size:0.78rem;color:var(--muted);margin-bottom:.8rem;font-family:'JetBrains Mono',monospace}
+.proj-result{font-size:0.88rem;color:var(--muted);flex:1;line-height:1.5;margin-bottom:1rem}
+.proj-result strong{color:var(--text)}
+.proj-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.9rem;border-top:1px solid var(--border)}
+.proj-link{font-size:0.82rem;color:var(--accent);display:flex;align-items:center;gap:.3rem}
+.proj-link:hover{text-decoration:none;opacity:.8}
+.proj-honest{font-size:0.72rem;color:var(--warn);font-style:italic}
+
+/* ── SKILLS ── */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.skill-group{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem}
+.skill-group h4{font-size:0.82rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.8rem}
+.skill-list{display:flex;flex-wrap:wrap;gap:.5rem}
+.skill-chip{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:3px 10px;font-size:0.8rem;color:var(--text)}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:0.85rem}
+footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
+
+/* ── MISC ── */
+.divider{height:1px;background:var(--border);margin:0 2rem}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-brand">Ajay Kumar Soma</span>
+  <div class="nav-links">
+    <a href="#story">Story</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="https://github.com/ajaykumarsoma" target="_blank" class="nav-gh">⭐ GitHub</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Mechanistic Interpretability</div>
+  <h1>Understanding What Neural Networks Actually Do</h1>
+  <p class="hero-sub">
+    13 experiments probing GPT-2 Small's internal representations — from training a transformer from scratch to locating specific factual knowledge in individual FFN neurons.
+  </p>
+  <div class="hero-links">
+    <a href="#projects" class="btn btn-primary">View Projects</a>
+    <a href="https://github.com/ajaykumarsoma" target="_blank" class="btn btn-ghost">GitHub Profile ↗</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- STORY -->
+<section id="story">
+<div class="section-inner">
+  <div class="section-label">The Arc</div>
+  <div class="section-title">A Systematic Approach to MI</div>
+  <p class="section-sub">Each project builds on the last. The goal: answer a single question — what computation is happening inside a language model, where, and why does it matter?</p>
+
+  <div class="story-grid">
+    <div class="story-card">
+      <div class="story-card-icon">🔬</div>
+      <h3>Predict</h3>
+      <p>What does the model output at each layer? <strong>LogitLens</strong> reads the residual stream at every depth, showing FFN₇ as the dominant contributor to factual token predictions.</p>
+    </div>
+    <div class="story-card">
+      <div class="story-card-icon">🧩</div>
+      <h3>Represent</h3>
+      <p>What does the model <em>know</em> at each layer? <strong>LinearProbing</strong> shows POS is undecodable from raw embeddings but fully encoded after one transformer block. <strong>SparseAutoencoder</strong> decomposes features into 2,048 near-orthogonal directions.</p>
+    </div>
+    <div class="story-card">
+      <div class="story-card-icon">⚡</div>
+      <h3>Cause</h3>
+      <p>What is <em>necessary</em> for a prediction? <strong>ActivationPatching</strong> identifies the exact attention heads responsible for indirect object identification. <strong>KnowledgeNeurons</strong> finds FFN neurons 47.65× more causally impactful than random.</p>
+    </div>
+    <div class="story-card">
+      <div class="story-card-icon">🎛️</div>
+      <h3>Control</h3>
+      <p>Can we steer behaviour using what we've learned? <strong>ActivationSteering</strong> uses contrastive vectors; <strong>SAEFeatureSteering</strong> uses decoder directions — both point to layer 8 as the optimal injection point.</p>
+    </div>
+  </div>
+
+  <!-- CONVERGENCE CALLOUT -->
+  <div class="callout" id="convergence">
+    <h3>🎯 Cross-Project Convergence Finding</h3>
+    <p>Four independent experiments — using completely different methods — all converge on the same answer: <strong>layers 7–8 are GPT-2 Small's semantic hub</strong>.</p>
+    <div class="callout-grid">
+      <div class="callout-item">
+        <strong>LogitLens</strong>
+        <span>FFN₇ has the largest direct logit attribution for factual tokens</span>
+      </div>
+      <div class="callout-item">
+        <strong>ActivationSteering</strong>
+        <span>L8 is the optimal CAA injection point; L4 and L11 are significantly weaker</span>
+      </div>
+      <div class="callout-item">
+        <strong>KnowledgeNeurons</strong>
+        <span>Peak gradient attribution across all 40 facts is at L7</span>
+      </div>
+      <div class="callout-item">
+        <strong>SAEFeatureSteering</strong>
+        <span>L8 hook_resid_pre is where domain features are most causally active</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+<div class="section-inner">
+  <div class="section-label">All Projects</div>
+  <div class="section-title">13 Experiments</div>
+  <p class="section-sub">Each project has a clean hypothesis, honest methodology, and quantitative results — including one deliberate null result.</p>
+
+  <div class="projects-grid">
+
+    <!-- 1 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">01</span>
+        <span class="proj-tag tag-build">Build</span>
+      </div>
+      <div class="proj-title">MinimalTransformer</div>
+      <div class="proj-technique">GPT-2 architecture · character-level LM</div>
+      <div class="proj-result">Train a decoder-only transformer from scratch on Tiny Shakespeare. Establishes the baseline: <strong>val_loss 1.447, perplexity 4.25</strong> after full training. Subsequent projects use this codebase or GPT-2 Small.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/MinimalTransformer" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">02</span>
+        <span class="proj-tag tag-observe">Observe</span>
+      </div>
+      <div class="proj-title">GPT2CircuitAnalysis</div>
+      <div class="proj-technique">Induction head scoring · attention pattern analysis</div>
+      <div class="proj-result">Systematically score all 144 attention heads in GPT-2 Small for induction behaviour using the repeated-sequence test. <strong>L7H5 induction score 0.958</strong>; induction heads cluster in layers 5–7.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/GPT2CircuitAnalysis" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">03</span>
+        <span class="proj-tag tag-decompose">Decompose</span>
+      </div>
+      <div class="proj-title">SparseAutoencoder</div>
+      <div class="proj-technique">Dictionary learning · L1 sparsity · feature geometry</div>
+      <div class="proj-result">Train a 2,048-feature ReLU SAE on GPT-2 Small's layer-8 residual stream. <strong>0 dead features</strong> after training; feature directions are near-orthogonal. Precursor to SAEFeatureSteering.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/SparseAutoencoder" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">04</span>
+        <span class="proj-tag tag-theory">Theory</span>
+      </div>
+      <div class="proj-title">ToyModelsOfSuperposition</div>
+      <div class="proj-technique">Superposition · sparsity phase transitions · geometry</div>
+      <div class="proj-result">Replicate Elhage et al. (2022). Show that <strong>effective features exceed hidden dimensions</strong> at high sparsity — demonstrating that superposition is a sparsity-driven phenomenon, not a capacity bug.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/ToyModelsOfSuperposition" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">05</span>
+        <span class="proj-tag tag-causal">Causal</span>
+      </div>
+      <div class="proj-title">ActivationPatching</div>
+      <div class="proj-technique">Causal intervention · IOI task · path patching</div>
+      <div class="proj-result">Run activation patching on the Indirect Object Identification task. <strong>L9H9 is the top name-mover head</strong>; patching it alone recovers 68% of the clean→corrupt performance gap.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/ActivationPatching" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">06</span>
+        <span class="proj-tag tag-read">Read</span>
+      </div>
+      <div class="proj-title">LogitLens</div>
+      <div class="proj-technique">Residual stream reading · direct logit attribution</div>
+      <div class="proj-result">Project every residual stream checkpoint through W_U. <strong>FFN₇ contributes the largest direct logit attribution</strong> for factual completions; embedding DLA is negative (suppressive).</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/LogitLens" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">07</span>
+        <span class="proj-tag tag-control">Control</span>
+      </div>
+      <div class="proj-title">ActivationSteering</div>
+      <div class="proj-technique">CAA · contrastive activation addition · alpha sweep</div>
+      <div class="proj-result">Derive sentiment steering vectors from paired positive/negative prompts. <strong>L8 is the optimal injection point</strong>; steering effect is near-linear in α with no abrupt saturation up to α=3.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/ActivationSteering" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">08</span>
+        <span class="proj-tag tag-null">Null Result</span>
+      </div>
+      <div class="proj-title">PlausibilityTrap</div>
+      <div class="proj-technique">Probing · classifier · deliberate null result</div>
+      <div class="proj-result">Attempt to decode factual plausibility from GPT-2's residual stream. <strong>AUC 0.47 — below chance.</strong> A deliberate honest negative result: demonstrates commitment to rigorous evaluation over cherry-picking.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/PlausibilityTrap" target="_blank">View on GitHub ↗</a>
+        <span class="proj-honest">honest null</span>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">09</span>
+        <span class="proj-tag tag-dynamics">Dynamics</span>
+      </div>
+      <div class="proj-title">GrokkingMechanisms</div>
+      <div class="proj-technique">Grokking · Fourier features · training phase analysis</div>
+      <div class="proj-result">Train a transformer on modular arithmetic and catch the grokking transition. <strong>Generalisation jumps at step ~4,000</strong>; Fourier analysis of the weights confirms the model discovers a structured periodic algorithm.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/GrokkingMechanisms" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">10</span>
+        <span class="proj-tag tag-decompose">Probing</span>
+      </div>
+      <div class="proj-title">LinearProbing</div>
+      <div class="proj-technique">Vocabulary-controlled heteronyms · logistic regression</div>
+      <div class="proj-result">Probe POS at all 13 checkpoints using 6 words that appear in all 3 roles. <strong>Raw embedding: 0.139 (below chance). After one block: 0.806.</strong> Syntactic encoding happens in a single attention+FFN pass.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/LinearProbing" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">11</span>
+        <span class="proj-tag tag-dynamics">Formation</span>
+      </div>
+      <div class="proj-title">InductionHeadFormation</div>
+      <div class="proj-technique">Synthetic sequences · ICL ratio · Olsson et al. replication</div>
+      <div class="proj-result">Train a 2-layer model on mixed random/repeated sequences. <strong>ICL ratio reaches 2.025</strong> (near-optimal) but the canonical look-back attention diagonal doesn't form — showing ICL ≠ induction head circuit at small scale.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/InductionHeadFormation" target="_blank">View on GitHub ↗</a>
+        <span class="proj-honest">honest null</span>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">12</span>
+        <span class="proj-tag tag-causal">Causal</span>
+      </div>
+      <div class="proj-title">KnowledgeNeurons</div>
+      <div class="proj-technique">Gradient × activation attribution · neuron suppression</div>
+      <div class="proj-result">Attribute 40 factual associations to individual FFN neurons using <code>|grad × act|</code>. Suppressing the top-20 neurons causes a drop <strong>47.65× larger</strong> than suppressing 20 random neurons. Peak attribution at L7.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/KnowledgeNeurons" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <span class="proj-num">13</span>
+        <span class="proj-tag tag-pipeline">Pipeline</span>
+      </div>
+      <div class="proj-title">SAEFeatureSteering</div>
+      <div class="proj-technique">Inline SAE · decoder directions · domain steering</div>
+      <div class="proj-result">Train a 512-feature SAE on layer-8 activations, identify domain-specific features (informal register: diff 17.2), then steer with decoder directions. <strong>Mean pairwise cosine sim: 0.0024</strong> — features are near-orthogonal and causally active.</div>
+      <div class="proj-footer">
+        <a class="proj-link" href="https://github.com/ajaykumarsoma/SAEFeatureSteering" target="_blank">View on GitHub ↗</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+<div class="section-inner">
+  <div class="section-label">Stack</div>
+  <div class="section-title">Tools & Techniques</div>
+  <p class="section-sub">All experiments run on CPU using open-source tools. No proprietary APIs, no black boxes.</p>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <h4>Core Libraries</h4>
+      <div class="skill-list">
+        <span class="skill-chip">PyTorch</span>
+        <span class="skill-chip">TransformerLens</span>
+        <span class="skill-chip">NumPy</span>
+        <span class="skill-chip">Matplotlib</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h4>MI Techniques</h4>
+      <div class="skill-list">
+        <span class="skill-chip">Activation Patching</span>
+        <span class="skill-chip">Linear Probing</span>
+        <span class="skill-chip">SAE Training</span>
+        <span class="skill-chip">LogitLens / DLA</span>
+        <span class="skill-chip">CAA Steering</span>
+        <span class="skill-chip">Gradient Attribution</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h4>ML Foundations</h4>
+      <div class="skill-list">
+        <span class="skill-chip">Transformer Architecture</span>
+        <span class="skill-chip">Attention Mechanisms</span>
+        <span class="skill-chip">Superposition Theory</span>
+        <span class="skill-chip">Causal Inference</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h4>Practice</h4>
+      <div class="skill-list">
+        <span class="skill-chip">Scikit-learn</span>
+        <span class="skill-chip">HuggingFace Hub</span>
+        <span class="skill-chip">Git / GitHub</span>
+        <span class="skill-chip">Python 3.x</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Ajay Kumar Soma &mdash; Mechanistic Interpretability Portfolio &mdash;
+  <a href="https://github.com/ajaykumarsoma" target="_blank">github.com/ajaykumarsoma</a></p>
+  <p style="margin-top:.4rem;font-size:0.8rem">Built with PyTorch · TransformerLens · GPT-2 Small · CPU only</p>
+</footer>
+
+</body>
+</html>
