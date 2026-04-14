@@ -128,7 +128,7 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
   <div class="hero-badge">Mechanistic Interpretability</div>
   <h1>Understanding What Neural Networks Actually Do</h1>
   <p class="hero-sub">
-    17 experiments across Mechanistic Interpretability and Finetuning — from training a transformer from scratch to Direct Preference Optimization, with a consistent focus on understanding <em>why</em> models behave as they do.
+    23 experiments across Mechanistic Interpretability and Finetuning — from training a transformer from scratch to Direct Preference Optimization, with a consistent focus on understanding <em>why</em> models behave as they do.
   </p>
   <div class="hero-links">
     <a href="#projects" class="btn btn-primary">View Projects</a>
@@ -200,7 +200,7 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
 <section id="projects">
 <div class="section-inner">
   <div class="section-label">All Projects</div>
-  <div class="section-title">17 Experiments</div>
+  <div class="section-title">23 Experiments</div>
   <p class="section-sub">Each project has a clean hypothesis, honest methodology, and quantitative results — including deliberate null results and counter-intuitive findings.</p>
 
   <div class="projects-grid">
@@ -437,6 +437,60 @@ footer a{color:var(--muted)}.footer a:hover{color:var(--text)}
       <div class="proj-technique">Direct Preference Optimization · frozen ref model · β·log-ratio</div>
       <div class="proj-result">Reward gap 0 → 6.12 in 200 steps. <strong>Rejected responses pushed 6× further from reference than preferred</strong> (−72.5 vs −11.3 log-ratio) — the asymmetry is DPO's core mechanism.</div>
       <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/DPO" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
+    <!-- 18 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">18</span><span class="proj-tag tag-build">RAG</span></div>
+      <div class="proj-title">RAG</div>
+      <div class="proj-technique">TF-IDF + dense retrieval · log-prob scoring · MPS batch embed</div>
+      <div class="proj-result">TF-IDF retrieves correctly 97% of the time, lifting accuracy +18pp. <strong>Dense (GPT-2 last-layer mean-pool) only 28% retrieval</strong> — motivates sentence-transformers over raw LM embeddings for semantic search.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/RAG" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
+    <!-- 19 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">19</span><span class="proj-tag tag-dynamics">Distil</span></div>
+      <div class="proj-title">KnowledgeDistillation</div>
+      <div class="proj-technique">Hinton KD loss · T² scaling · soft vs hard labels</div>
+      <div class="proj-result">Hard CE outperforms KD at 150 steps (56 vs 149 PPL) with T=4 α=0.7. <strong>The T² factor makes KD 16× harder to minimize than CE at short runs</strong> — demonstrates why production distillation uses α≈0.5, T≈2, and full training.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/KnowledgeDistillation" target="_blank">View on GitHub ↗</a><span class="proj-honest">honest finding</span></div>
+    </div>
+
+    <!-- 20 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">20</span><span class="proj-tag tag-pipeline">Deploy</span></div>
+      <div class="proj-title">Quantization</div>
+      <div class="proj-technique">Absmax symmetric PTQ · INT8/INT4 · PPL + latency</div>
+      <div class="proj-result"><strong>INT8: +6.6 PPL with 4× compression</strong> (near-lossless). INT4 collapses +3,068 PPL — the 73% quantization error demonstrates exactly why NF4 / per-channel quantization (QLoRA) is needed for 4-bit.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/Quantization" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
+    <!-- 21 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">21</span><span class="proj-tag tag-control">RLHF</span></div>
+      <div class="proj-title">RewardModeling</div>
+      <div class="proj-technique">Bradley-Terry loss · frozen backbone · scalar head</div>
+      <div class="proj-result"><strong>AUC 0.34 → 0.98 with only 768 trainable parameters</strong> (a single linear head on frozen GPT-2). 100% val accuracy at step 100. Shows that preference signal is largely already encoded in the backbone's final hidden state.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/RewardModeling" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
+    <!-- 22 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">22</span><span class="proj-tag tag-build">Merge</span></div>
+      <div class="proj-title">ModelMerging</div>
+      <div class="proj-technique">SLERP · domain FT checkpoints · capability frontier</div>
+      <div class="proj-result"><strong>α=0.5 SLERP achieves literary PPL 1.5 AND scientific PPL 1.4 simultaneously</strong> — both near-specialist level, zero training. Demonstrates smooth capability interpolation across the full α=[0,1] frontier.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/ModelMerging" target="_blank">View on GitHub ↗</a></div>
+    </div>
+
+    <!-- 23 -->
+    <div class="proj-card">
+      <div class="proj-header"><span class="proj-num">23</span><span class="proj-tag tag-pipeline">Inference</span></div>
+      <div class="proj-title">SpeculativeDecoding</div>
+      <div class="proj-technique">Draft-verify loop · DistilGPT-2 + GPT-2 · MPS dispatch</div>
+      <div class="proj-result"><strong>4.12× wall-clock speedup</strong> on M4 MPS. DistilGPT-2 draft (γ=4) + GPT-2 Small verification. Measured speedup exceeds theory — MPS amortizes target kernel dispatch across γ positions vs 50 sequential single-token calls.</div>
+      <div class="proj-footer"><a class="proj-link" href="https://github.com/ajaykumarsoma/SpeculativeDecoding" target="_blank">View on GitHub ↗</a></div>
     </div>
 
   </div>
